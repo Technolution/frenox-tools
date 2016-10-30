@@ -28,43 +28,57 @@ ISA			:= RV32IMA
 XLEN		:= 32
 
 
+###############################################################################
+## phony rules
+###############################################################################
+.PHONY: all fesvr gcc-newlib gcc-linux isa-sim tag sub-update show-prefix push-tag
+
 all: fesvr gcc-newlib gcc-linux isa-sim
-
-
-.PHONY: fesvr gcc-newlib gcc-linux isa-sim tag
-
 fesvr: build/riscv-fesvr/done
 gcc-newlib: build/riscv-gcc-newlib/done
 gcc-linux: build/riscv-gcc-linux/done
 isa-sim: build/riscv-isa-sim/done
+sub-update: build/sub-update
 
 show-prefix:
 	@echo "install prefix := $(PREFIX)"
-	
-build/riscv-gcc-newlib/done:
+
+push-tag:
+	git push --follow-tags
+
+###############################################################################
+## build rules
+###############################################################################
+
+build/sub-update:
+	mkdir -p $(@D)	
+	git submodule update --init --recursive
+	touch $@
+
+build/riscv-gcc-newlib/done: build/sub-update
 	mkdir -p $(@D)
 	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --disable-float --enable-atomic --with-xlen=$(XLEN) --with-arch=$(ISA)
 	make -C $(@D)
 	touch $@
-	
-build/riscv-gcc-linux/done:
+
+build/riscv-gcc-linux/done: build/sub-update
 	mkdir -p $(@D)
 	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --disable-float --enable-atomic --with-xlen=$(XLEN) --with-arch=$(ISA)
 	make -C $(@D) linux
 	touch $@
 
-build/riscv-fesvr/done:
+build/riscv-fesvr/done: build/sub-update
 	mkdir -p $(@D)
 	cd $(@D) && ../../riscv-fesvr/configure --prefix=$(PREFIX)
 	$(MAKE) -C $(@D) install
 	touch $@
-	
-build/riscv-isa-sim/done: build/riscv-fesvr/done 
+
+build/riscv-isa-sim/done: build/riscv-fesvr/done build/sub-update
 	mkdir -p $(@D)
 	cd $(@D) && ../../riscv-isa-sim/configure --prefix=$(PREFIX) --with-fesvr=$(PREFIX) --with-isa=$(ISA)
 	make -C $(@D) install
 	touch $@
-	
+
 clean:
 	rm -rf build/
 

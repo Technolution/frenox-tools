@@ -1,0 +1,9 @@
+[submodule "riscv-gnu-toolchain"]
+	path = riscv-gnu-toolchain
+	url = ../riscv-gnu-toolchain
+[submodule "riscv-isa-sim"]
+	path = riscv-isa-sim
+	url = ../riscv-isa-sim
+[submodule "riscv-fesvr"]
+	path = riscv-fesvr
+	url = ../riscv-fesvr

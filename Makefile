@@ -20,11 +20,11 @@
 ## core
 ###############################################################################
 
-INSTALLDIR 	:= /opt/edes/frenox/
+INSTALLDIR 	:= /opt/edes/toolchains/
 RELEASE	   	:= $(shell git describe --always)
-PREFIX		:= $(abspath $(INSTALLDIR)/$(RELEASE)/)
+PREFIX		:= $(abspath $(INSTALLDIR)/gcc-riscv-unknown-rv32ima-$(RELEASE)/)
 
-ISA			:= RV32IMA
+ISA		:= RV32IMA
 XLEN		:= 32
 
 

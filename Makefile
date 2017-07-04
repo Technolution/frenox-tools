@@ -57,13 +57,13 @@ build/sub-update:
 
 build/riscv-gcc-newlib/done: build/sub-update
 	mkdir -p $(@D)
-	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --disable-float --enable-atomic --with-xlen=$(XLEN) --with-arch=$(ISA)
+	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --enable-atomic --with-arch=rv32ima --with-guile=no --with-abi=ilp32
 	make -C $(@D)
 	touch $@
 
 build/riscv-gcc-linux/done: build/sub-update
 	mkdir -p $(@D)
-	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --disable-float --enable-atomic --with-xlen=$(XLEN) --with-arch=$(ISA)
+	cd $(@D) && ../../riscv-gnu-toolchain/configure --prefix=$(PREFIX) --enable-atomic --with-arch=rv32ima --with-guile=no --with-abi=ilp32
 	make -C $(@D) linux
 	touch $@
 
